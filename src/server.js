@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import rateLimit from "express-rate-limit";
 import { connectDB } from "./config/db.js";
 dotenv.config();
 
@@ -17,6 +18,20 @@ app.use(cors());
 
 // mongoose
 connectDB();
+
+// Rate limiting configuration
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  message: {
+    error: "Too many requests from this IP, please try again after 15 minutes",
+  },
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
+
+// Apply rate limiting to all routes
+app.use(limiter);
 
 // Routes
 app.use("/api/study", studyRoutes);
