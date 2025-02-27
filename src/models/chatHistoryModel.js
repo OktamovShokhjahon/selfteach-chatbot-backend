@@ -28,6 +28,21 @@ const chatHistorySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    subject: {
+      type: String,
+      required: true,
+    },
+    topic: {
+      type: String,
+      // type: mongoose.Schema.Types.ObjectId,
+      // ref: "Topic",
+      required: true,
+    },
+    command: {
+      type: String,
+      required: true,
+      enum: ["tushuntir", "yech", "tahlil", "solishtir", "qisqacha"],
+    },
   },
   {
     timestamps: true,
